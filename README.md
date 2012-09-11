@@ -33,7 +33,7 @@ Long click can get Asset Specific details like contracts/bills/...
 - 3 : scan view will trigger scan and ask for details if asset is unknown
 - 4 : Ticket View. Tickets will be imported/updated from some tool, I will use generic XML web service, so it can be integrated later on other tools. 
 
-Have fun if you want to start coding with mem no problem -
+Have fun if you want to start coding with me, no problem -
 
 I plan on doing and interface for tablets. (dual pane) later on.)
 
