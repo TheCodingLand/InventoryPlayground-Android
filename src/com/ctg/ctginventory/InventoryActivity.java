@@ -70,7 +70,9 @@ public class InventoryActivity extends FragmentActivity implements ActionBar.Tab
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
     	  IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
     	  if (scanResult != null) {
-    		  
+    	      String content = scanResult.getContents();
+    	      //getAssetOrAddNew(content); //TODO
+    	      //populate tab3 textview to let it display details.
     	  }
     	  // else continue with any other code you need in the method
     	  
@@ -119,24 +121,26 @@ public class InventoryActivity extends FragmentActivity implements ActionBar.Tab
             textView.setText(Integer.toString(args.getInt(ARG_SECTION_NUMBER)));*/
         	switch (args.getInt(ARG_SECTION_NUMBER)) {
         	case 1:
+        		//list of computers + Users
         		//RelativeLayout relativeLayout = getComputersLayout();
         		break;
         	case 2:
-        		
+        		//Quick Tickets View
         		
         		break;
         	case 3:
-        		
+        		// Create a view from a selected item (SelectedAssetID in the view) 
         		
         		
         		break;
         	case 4:
         		IntentIntegrator integrator = new IntentIntegrator(this.getActivity());
                 integrator.initiateScan(IntentIntegrator.QR_CODE_TYPES);
+                
         		break;
         	}
             
-           
+            RelativeLayout relativeLayout = new RelativeLayout(this.getActivity());//FIX this is just to prevent eclipse from complaining.
             return relativeLayout;
         }
     }

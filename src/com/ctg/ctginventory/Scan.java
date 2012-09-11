@@ -13,7 +13,7 @@ public class Scan extends Fragment {
 		    IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
 		    if (scanResult != null) {
 		    	String contents = intent.getStringExtra("SCAN_RESULT");
-                String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                // String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
                 // Handle successful scan
                 TextView assetName = (TextView) getActivity().findViewById(R.id.menu_settings);
                 assetName.setText(contents);
