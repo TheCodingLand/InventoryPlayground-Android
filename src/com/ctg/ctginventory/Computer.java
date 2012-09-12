@@ -9,8 +9,32 @@ public class Computer extends Asset {
 	private String memory;
 	private String windowsVersion;
 	private String reservedIP;
+	private long assetID;
 	
+	public Computer(Asset asset) {
+		
+		this.assetID = asset.getId();
+		this.setName(asset.getName());
+		/*this.assetID = asset.getId();
+		this.assetID = asset.getId();
+		this.assetID = asset.getId();
+		this.assetID = asset.getId();*/
+		
+	}
 	
+	public Computer() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public long getAssetID() {
+		return assetID;
+	}
+
+	public void setAssetID(long l) {
+		this.assetID = l;
+	}
+
 	public String getReservedIP() {
 		return reservedIP;
 	}

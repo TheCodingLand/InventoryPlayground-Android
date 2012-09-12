@@ -1,0 +1,46 @@
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="76dp" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/textComputerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView1"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toRightOf="@+id/imageView1"
+            android:text="XXXX-PC-W7-001"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textUser"
+            android:layout_width="40dp"
+            android:layout_marginLeft="15dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textComputerName"
+            android:layout_toRightOf="@+id/textComputerName"
+            android:text="User"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/textNumberofScreens"
+            android:layout_width="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textUser"
+            android:layout_alignBottom="@+id/textUser"
+            android:layout_toRightOf="@+id/textUser"
+            android:text="2"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </RelativeLayout>

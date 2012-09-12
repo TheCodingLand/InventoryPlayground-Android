@@ -3,33 +3,37 @@ package com.ctg.ctginventory;
 
 
 
+import java.util.List;
+
 import android.app.ActionBar;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+public class InventoryActivity extends FragmentActivity 
+    implements ActionBar.TabListener, 
+    ComputerListFragment.OnDisplayDetailViewListener {
+	
 
-public class InventoryActivity extends FragmentActivity implements ActionBar.TabListener {
 
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
     private DataSource datasource;
+    private List<Computer> computers;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         datasource = new DataSource(this);
         datasource.open();
+        computers = datasource.getAllComputers();
         datasource.close();
+        
         setContentView(R.layout.activity_inventory);
 
         // Set up the action bar.
@@ -42,7 +46,15 @@ public class InventoryActivity extends FragmentActivity implements ActionBar.Tab
         actionBar.addTab(actionBar.newTab().setText(R.string.title_section3).setTabListener(this));
         actionBar.addTab(actionBar.newTab().setText(R.string.title_section4).setTabListener(this));
     }
-    
+    public void showItemDetailTab(String item) {
+        Fragment fragment = new DummySectionFragment();
+        Bundle args = new Bundle();
+        args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, 3);
+        fragment.setArguments(args);
+        getFragmentManager().beginTransaction()
+            .replace(R.id.container, fragment)
+            .commit();
+     }
     
     
 
@@ -71,6 +83,10 @@ public class InventoryActivity extends FragmentActivity implements ActionBar.Tab
     	  IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
     	  if (scanResult != null) {
     	      String content = scanResult.getContents();
+    	      datasource = new DataSource(this);
+    	      datasource.open();
+    	      Computer computer = datasource.createComputer(content);
+    	      //gototab3
     	      //getAssetOrAddNew(content); //TODO
     	      //populate tab3 textview to let it display details.
     	  }
@@ -89,7 +105,7 @@ public class InventoryActivity extends FragmentActivity implements ActionBar.Tab
         Bundle args = new Bundle();
         args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, tab.getPosition() + 1);
         fragment.setArguments(args);
-        getSupportFragmentManager().beginTransaction()
+        getFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
     }
@@ -103,7 +119,10 @@ public class InventoryActivity extends FragmentActivity implements ActionBar.Tab
      */
     
     
-    public static class DummySectionFragment extends Fragment {
+   
+    
+    
+    public class DummySectionFragment extends Fragment {
         public DummySectionFragment() {
         }
 
@@ -114,6 +133,7 @@ public class InventoryActivity extends FragmentActivity implements ActionBar.Tab
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
         	Bundle args = getArguments();
+        	View view = inflater.inflate(R.layout.activity_inventory, container, false);
         
             /*TextView textView = new TextView(getActivity());
             textView.setGravity(Gravity.CENTER);
@@ -121,15 +141,19 @@ public class InventoryActivity extends FragmentActivity implements ActionBar.Tab
             textView.setText(Integer.toString(args.getInt(ARG_SECTION_NUMBER)));*/
         	switch (args.getInt(ARG_SECTION_NUMBER)) {
         	case 1:
+        		gotoComputerListView();
+        		
+        		// Computer : User . ip . nb of screens
         		//list of computers + Users
         		//RelativeLayout relativeLayout = getComputersLayout();
+        		
         		break;
         	case 2:
         		//Quick Tickets View
         		
         		break;
         	case 3:
-        		// Create a view from a selected item (SelectedAssetID in the view) 
+        		gotoDetailListView(""); 
         		
         		
         		break;
@@ -140,8 +164,48 @@ public class InventoryActivity extends FragmentActivity implements ActionBar.Tab
         		break;
         	}
             
-            RelativeLayout relativeLayout = new RelativeLayout(this.getActivity());//FIX this is just to prevent eclipse from complaining.
-            return relativeLayout;
+        return view;
         }
+    
+        public void gotoComputerListView() {
+            FragmentManager fm = getFragmentManager();
+            
+            if (fm != null) {
+                // Perform the FragmentTransaction to load in the list tab content.
+                // Using FragmentTransaction#replace will destroy any Fragments
+                // currently inside R.id.fragment_content and add the new Fragment
+                // in its place.
+            	FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.container, new ComputerListFragment());
+                ft.commit();
+            }
+        }   
+  
     }
+    public void onArticleSelected(String item) {
+        gotoDetailListView(item);
+    }
+    public void gotoDetailListView(String item) {
+        FragmentManager fm = getFragmentManager();
+        
+        if (fm != null && item != "") {
+            // Perform the FragmentTransaction to load in the list tab content.
+            // Using FragmentTransaction#replace will destroy any Fragments
+            // currently inside R.id.fragment_content and add the new Fragment
+            // in its place.
+        	FragmentTransaction ft = fm.beginTransaction();
+        	
+            Fragment detailListFragment = new DetailFragment();
+            Bundle args = new Bundle();
+            args.putString("item", item);
+            detailListFragment.setArguments(args);
+            ft.replace(R.id.container, detailListFragment);
+            ft.commit();
+            
+            
+        }
+    } 
+
+	
+    
 }

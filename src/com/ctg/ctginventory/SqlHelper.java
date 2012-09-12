@@ -108,14 +108,14 @@ public class SqlHelper extends SQLiteOpenHelper {
 	
 	//COLUMNS INDEXES
 	static final int assetIdIndex = 0;
-	static final int assetNameIndex = 0;
-	static final int assetPictureIndex = 0;
-	static final int assetStatusIndex = 0;
-	static final int assetSerialIndex = 0;
-	static final int assetTypeIndex = 0;
-	static final int assetLocationIndex = 0;
-	static final int assetContractIndex = 0;
-	static final int assetPrimaryUserIndex = 0;
+	static final int assetNameIndex = 1;
+	static final int assetPictureIndex = 2;
+	static final int assetStatusIndex = 3;
+	static final int assetSerialIndex = 4;
+	static final int assetTypeIndex = 5;
+	static final int assetLocationIndex = 6;
+	static final int assetContractIndex = 7;
+	static final int assetPrimaryUserIndex = 8;
 	
 
 	//TableCreateSTRING

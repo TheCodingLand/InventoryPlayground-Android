@@ -15,8 +15,9 @@ public class DataSource {
   private SQLiteDatabase database;
   private SqlHelper dbHelper;
   private String[] assetsAllColumns = { SqlHelper.colAssetID,
-		  SqlHelper.colAssetName, SqlHelper.colAssetType, SqlHelper.colAssetPictureFilePath };
-
+		  SqlHelper.colAssetName, SqlHelper.colAssetType, SqlHelper.colAssetPictureFilePath, SqlHelper.colAssetPrimaryUserID };
+  private String[] computersAllColumns = { SqlHelper.colComputerID, SqlHelper.colComputerWindowsVersion, SqlHelper.colComputerAsset };
+		  
   public DataSource(Context context) {
     dbHelper = new SqlHelper(context);
   }
@@ -59,14 +60,15 @@ public class DataSource {
     
     long insertId = database.insert(SqlHelper.computerTableName, null, values);
     Cursor cursor = database.query(SqlHelper.computerTableName,
-        assetsAllColumns, SqlHelper.colAssetID + " = " + insertId, null,
+        computersAllColumns, SqlHelper.colComputerID + " = " + insertId, null,
         null, null, null);
     cursor.moveToFirst();
-    Computer newComputer =  (Computer) cursorToAsset(cursor);
+    Computer newComputer = new Computer(cursorToAsset(cursor));
     cursor.close();
     return newComputer;
   
   }
+ 
 
   public void deleteAsset(Asset asset) {
     long id = asset.getId();
@@ -91,7 +93,49 @@ public class DataSource {
     cursor.close();
     return assets;
   }
+  
+  public Computer getComputer(String name) {
+	  
 
+	  Cursor cursor = database.query(SqlHelper.assetTableName,
+		        assetsAllColumns, SqlHelper.colAssetName + " = '" + name + "'", null, null, null, null);
+	  cursor.moveToFirst();
+	  Asset asset = cursorToAsset(cursor);
+	  
+	  Computer computer = new Computer(asset);
+	  computer.setName(asset.getName());
+	  computer.setWindowsVersion("W7");
+	  cursor.close();
+	  return computer;
+	  }
+	  
+  
+
+  public List<Computer> getAllComputers() {
+	    List<Computer> computers = new ArrayList<Computer>();
+
+	    Cursor cursor = database.query(SqlHelper.computerTableName,
+	        computersAllColumns, null, null, null, null, null);
+        
+	    
+	    
+	    cursor.moveToFirst();
+	    while (!cursor.isAfterLast()) {
+	      Computer computer = cursorToComputer(cursor);
+	      Cursor matchingAssetCursor = database.query(SqlHelper.assetTableName,
+			        assetsAllColumns, SqlHelper.colAssetID + " = " + computer.getAssetID(), null, null, null, null);
+	      matchingAssetCursor.moveToFirst();
+	      Asset asset = cursorToAsset(matchingAssetCursor);
+	      matchingAssetCursor.close();
+	      computer.setName(asset.getName());
+	      computers.add(computer);
+	      cursor.moveToNext();
+	    }
+	    // Make sure to close the cursor
+	    cursor.close();
+	    return computers;
+	  }
+  
   private Asset cursorToAsset(Cursor cursor) {
     Asset asset = new Asset();
     asset.setId(cursor.getLong(SqlHelper.assetIdIndex));
@@ -100,6 +144,15 @@ public class DataSource {
     return asset;
   }
 
+  private Computer cursorToComputer(Cursor cursor) {
+	    Computer computer = new Computer();
+	    computer.setId(cursor.getLong(0));
+	    computer.setWindowsVersion(cursor.getString(1));
+	    computer.setAssetID(cursor.getLong(2));
+	    
+	    return computer;
+	  }
+  
   public Asset getAssetFromScanedResult(String contents) {
 		// TODO Auto-generated method stub
 	 //Cursor cursor = database.query(SqlHelper.TABLE_ASSETS,

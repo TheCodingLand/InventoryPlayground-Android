@@ -11,7 +11,14 @@ public class Asset {
     private Contract contract;
     private String serial;
     private Provider provider;
-    private User primaryUser;
+    private String type;
+    public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	private User primaryUser;
     private Bill bill;
     
     public Bill getBill() {
