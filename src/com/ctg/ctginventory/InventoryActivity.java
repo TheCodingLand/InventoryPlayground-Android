@@ -26,6 +26,7 @@ public class InventoryActivity extends FragmentActivity
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
     private DataSource datasource;
     private List<Computer> computers;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +48,8 @@ public class InventoryActivity extends FragmentActivity
         actionBar.addTab(actionBar.newTab().setText(R.string.title_section4).setTabListener(this));
     }
     public void showItemDetailTab(String item) {
+    	
+    	
         Fragment fragment = new DummySectionFragment();
         Bundle args = new Bundle();
         args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, 3);
@@ -193,6 +196,9 @@ public class InventoryActivity extends FragmentActivity
             // Using FragmentTransaction#replace will destroy any Fragments
             // currently inside R.id.fragment_content and add the new Fragment
             // in its place.
+        	
+            
+            getActionBar().setSelectedNavigationItem(2);
         	FragmentTransaction ft = fm.beginTransaction();
         	
             Fragment detailListFragment = new DetailFragment();
